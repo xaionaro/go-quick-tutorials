@@ -18,7 +18,7 @@ func (t *someClass) Init() (bool) {
 }
 
 func (t someClass) StrangeInit() (bool) {
-	fmt.Printf(" someClass.Init()\n");
+	fmt.Printf(" someClass.StrangeInit()\n");
 	t.Initialized1 = true
 
 	return true
