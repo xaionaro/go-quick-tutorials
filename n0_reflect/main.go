@@ -10,26 +10,30 @@ type someClass struct {
 	Initialized1 bool
 }
 
-func (t *someClass) Init() {
+func (t *someClass) Init() (bool) {
 	fmt.Printf("*someClass.Init()\n");
 	t.Initialized0 = true
+
+	return true
 }
 
-func (t someClass) StrangeInit() {
+func (t someClass) StrangeInit() (bool) {
 	fmt.Printf(" someClass.Init()\n");
 	t.Initialized1 = true
+
+	return true
 }
 
-func callMethodByName(obj interface{}, methodName string) (error) {
+func callMethodByName(obj interface{}, methodName string) (bool, error) {
 	objValue := reflect.ValueOf(obj)
 
 	methodValue := objValue.MethodByName(methodName)
 	if (!methodValue.IsValid()) {
-		return fmt.Errorf("There's no such method \"%v\" in obj of type \"%v\"", methodName, objValue.Type().Name())
+		return false, fmt.Errorf("There's no such method \"%v\" in obj of type \"%v\"", methodName, objValue.Type().Name())
 	}
-	methodValue.Call([]reflect.Value{})
+	result := methodValue.Call([]reflect.Value{})
 
-	return nil
+	return result[0].Interface().(bool), nil
 }
 
 func main() {
@@ -37,17 +41,19 @@ func main() {
 
 	// Practicing in "MethodByName" (reflect):
 
-	err := callMethodByName(&obj, "Init")	// You cannot call "StrangeInit" on "&obj" and "Init" on "obj".
+	res,err := callMethodByName(&obj, "Init")	// You cannot call "StrangeInit" on "&obj" and "Init" on "obj".
 	if (err != nil) {
 		fmt.Printf("Cannot call the method \"Init\": %v\n", err.Error());
 		return;
 	}
+	fmt.Printf("res0: %v\n", res);
 
-	err  = callMethodByName( obj, "StrangeInit")
+	res,err  = callMethodByName( obj, "StrangeInit")
 	if (err != nil) {
 		fmt.Printf("Cannot call the method \"Init\": %v\n", err.Error());
 		return;
 	}
+	fmt.Printf("res1: %v\n", res);
 
-	fmt.Printf("%v\n", obj)
+	fmt.Printf("\nobj == %v\n", obj)
 }
