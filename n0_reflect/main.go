@@ -50,10 +50,21 @@ func main() {
 
 	res,err  = callMethodByName( obj, "StrangeInit")
 	if (err != nil) {
-		fmt.Printf("Cannot call the method \"Init\": %v\n", err.Error());
+		fmt.Printf("Cannot call the method \"StrangeInit\": %v\n", err.Error());
 		return;
 	}
 	fmt.Printf("res1: %v\n", res);
 
 	fmt.Printf("\nobj == %v\n", obj)
 }
+
+/* Total output:
+
+*someClass.Init()
+res0: true
+ someClass.StrangeInit()
+res1: true
+
+obj == {true false}
+
+*/
